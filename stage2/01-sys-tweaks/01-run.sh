@@ -11,6 +11,8 @@ install -m 644 files/console-setup   	"${ROOTFS_DIR}/etc/default/"
 
 install -m 755 files/rc.local		"${ROOTFS_DIR}/etc/"
 
+install -m 755 files/clusterpiuart.py		"${ROOTFS_DIR}/root/"
+
 on_chroot << EOF
 systemctl disable hwclock.sh
 systemctl disable nfs-common
@@ -54,3 +56,9 @@ usermod --pass='*' root
 EOF
 
 rm -f "${ROOTFS_DIR}/etc/ssh/"ssh_host_*_key*
+
+echo "enable rc-local"
+
+on_chroot << EOF
+	systemctl enable rc-local
+EOF

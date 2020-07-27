@@ -11,10 +11,24 @@
 #
 # By default this script does nothing.
 
+exec 2> /tmp/rc.local.log  # send stderr from rc.local to a log file
+exec 1>&2                      # send stdout to the same log file
+set -x                         # tell sh to display commands before execution
+
 # Print the IP address
 _IP=$(hostname -I) || true
 if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
+
+FIRST_BOOT_LOG=/root/firstboot.log
+
+if [ ! -e ${FIRST_BOOT_LOG} ]; then
+  touch ${FIRST_BOOT_LOG}
+  update-ca-certificates -f | tee ${FIRST_BOOT_LOG}
+  su pi -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y" | tee ${FIRST_BOOT_LOG}
+fi
+
+/root/clusterpiuart.py &
 
 exit 0

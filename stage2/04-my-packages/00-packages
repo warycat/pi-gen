@@ -1,0 +1,12 @@
+git
+libssl-dev
+libdbus-1-dev
+libglib2.0-dev
+libudev-dev
+libical-dev
+libreadline-dev
+python3-dbus
+dbus-x11
+vim
+screen
+python3-pip
